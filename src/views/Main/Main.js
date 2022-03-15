@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import './Main.css';
 
+import Country from '../../components/Country/Country';
+
 import { fetchCountries } from '../../services/fetch';
 // import BlogCard from '../../components/BlogCard/BlogCard';
 
@@ -23,7 +25,7 @@ function Main() {
     <section className="main">
       <div className="countries">
         {countries.map((country) => (
-          <p key={country.id}>{country.name}</p>
+          <Country key={country.id} {...country} />
         ))}
       </div>
     </section>
