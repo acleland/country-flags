@@ -2,12 +2,35 @@ import React, { useEffect, useState } from 'react';
 import './Main.css';
 
 import Country from '../../components/Country/Country';
+import Filter from '../../components/Filter/Filter';
 
 import { fetchCountries } from '../../services/fetch';
-// import BlogCard from '../../components/BlogCard/BlogCard';
+
+// Utility function for getting unique continent values from the data
+function getContinentList(countries) {
+  let arr = [];
+  for (let country of countries) {
+    if (country.continent && !arr.includes(country.continent)) {
+      arr.push(country.continent);
+    }
+  }
+  return arr;
+}
+
+// Filter countries by continent
+const noContinent = 'Continent Not Specified';
+
+function filterByContinent(countries, continent) {
+  if (continent === noContinent) {
+    return countries.filter((country) => !country.continent);
+  }
+  return countries.filter((country) => country.continent === continent || continent === 'All');
+}
 
 function Main() {
+  const [continent, setContinent] = useState('All');
   const [countries, setCountries] = useState([]);
+  const continents = getContinentList(countries);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,8 +46,9 @@ function Main() {
 
   return (
     <section className="main">
+      <Filter options={['All', ...continents, noContinent]} callback={setContinent} />
       <div className="countries">
-        {countries.map((country) => (
+        {filterByContinent(countries, continent).map((country) => (
           <Country key={country.id} {...country} />
         ))}
       </div>
