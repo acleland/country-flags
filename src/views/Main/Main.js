@@ -31,12 +31,14 @@ function Main() {
   const [continent, setContinent] = useState('All');
   const [countries, setCountries] = useState([]);
   const continents = getContinentList(countries);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const resp = await fetchCountries();
         setCountries(resp);
+        setLoading(false);
       } catch (e) {
         alert(e.message);
       }
@@ -44,6 +46,9 @@ function Main() {
     fetchData();
   }, []);
 
+  if (loading) {
+    return <p>Loading...</p>;
+  }
   return (
     <section className="main">
       <Filter options={['All', ...continents, noContinent]} callback={setContinent} />
